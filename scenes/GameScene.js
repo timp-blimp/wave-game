@@ -107,5 +107,10 @@ export default class GameScene {
   // Restart logic handled by keyboard
   handleRestart() {
     this.enter();
+    window.addEventListener('restartGame', () => {
+  if (this.state === 'gameOver') {
+    this.enter();
+  }
+});
   }
 }
