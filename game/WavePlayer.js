@@ -51,53 +51,39 @@ export default class WavePlayer {
 
   ctx.save();
 
-  ctx.lineWidth = 6;              // thicker
+  // === Outer glow pass ===
+  ctx.shadowColor = this.color;
+  ctx.shadowBlur = 30;
+  ctx.lineWidth = 14;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
+  ctx.strokeStyle = this.color;
 
-  ctx.shadowColor = this.color;   // glow
-  ctx.shadowBlur = 15;
+  ctx.beginPath();
+  ctx.moveTo(this.trail[0].x, this.trail[0].y);
 
   for (let i = 1; i < this.trail.length; i++) {
-    const p1 = this.trail[i - 1];
-    const p2 = this.trail[i];
-
-    // Stronger fade gradient
-    const alpha = i / this.trail.length;
-
-    ctx.strokeStyle = this.applyAlpha(this.color, alpha);
-
-    ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y);
-    ctx.lineTo(p2.x, p2.y);
-    ctx.stroke();
+    ctx.lineTo(this.trail[i].x, this.trail[i].y);
   }
+
+  ctx.stroke();
+
+  // === Bright inner core pass ===
+  ctx.shadowBlur = 0;
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#ffffff';
+
+  ctx.beginPath();
+  ctx.moveTo(this.trail[0].x, this.trail[0].y);
+
+  for (let i = 1; i < this.trail.length; i++) {
+    ctx.lineTo(this.trail[i].x, this.trail[i].y);
+  }
+
+  ctx.stroke();
 
   ctx.restore();
-  }
-
-  renderPlayer(ctx) {
-    ctx.save();
-
-    ctx.translate(this.x, this.y);
-
-    // Rotate instantly based on direction
-    const angle = this.direction === -1 ? -Math.PI / 4 : Math.PI / 4;
-    ctx.rotate(angle);
-
-    ctx.fillStyle = this.color;
-    ctx.shadowColor = this.color;
-    ctx.shadowBlur = 20;
-
-    ctx.beginPath();
-    ctx.moveTo(-this.size, this.size);
-    ctx.lineTo(this.size, 0);
-    ctx.lineTo(-this.size, -this.size);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.restore();
-  }
+}
 
   applyAlpha(hex, alpha) {
     const r = parseInt(hex.slice(1, 3), 16);
