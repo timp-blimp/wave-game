@@ -35,10 +35,11 @@ class InputManager {
 
   isKeyDown(key) {
     return this.keys.has(key);
-  }
-  if (e.key === 'r' || e.key === 'R') {
+    if (e.key === 'r' || e.key === 'R') {
   window.dispatchEvent(new Event('restartGame'));
-}
+  }
+  }
+  
 }
 
 const Input = new InputManager();
