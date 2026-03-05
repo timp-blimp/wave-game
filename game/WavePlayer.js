@@ -97,4 +97,28 @@ export default class WavePlayer {
     this.y = y;
     this.trail = [];
   }
+  renderPlayer(ctx) {
+  ctx.save();
+
+  ctx.translate(this.x, this.y);
+
+  // Instant rotation based on direction
+  const angle = this.direction === -1 ? -Math.PI / 4 : Math.PI / 4;
+  ctx.rotate(angle);
+
+  // Neon glow
+  ctx.shadowColor = this.color;
+  ctx.shadowBlur = 25;
+
+  ctx.fillStyle = this.color;
+
+  ctx.beginPath();
+  ctx.moveTo(-this.size, this.size);
+  ctx.lineTo(this.size, 0);
+  ctx.lineTo(-this.size, -this.size);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
 }
