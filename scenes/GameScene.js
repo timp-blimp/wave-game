@@ -18,6 +18,7 @@ export default class GameScene {
     this.collision = null;
     this.camera = null;
 
+    this.timeAlive = 0;
     this.score = 0;
     this.state = 'running'; // running | gameOver
   }
@@ -46,7 +47,8 @@ export default class GameScene {
     if (this.state === 'gameOver') return;
 
     this.player.update(dt);
-
+    this.timeAlive += dt;
+    this.score = Math.floor(this.timeAlive * 10);
     // Camera follows player
     this.camera.setPosition(
       this.player.x - this.canvas.width / 3,
