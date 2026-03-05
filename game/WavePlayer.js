@@ -16,7 +16,7 @@ export default class WavePlayer {
 
     this.direction = 1; // 1 = down, -1 = up
     this.trail = [];
-    this.maxTrailLength = 60;
+    this.maxTrailLength = 150;
   }
 
   update(dt) {
@@ -47,24 +47,33 @@ export default class WavePlayer {
   }
 
   renderTrail(ctx) {
-    ctx.save();
-    ctx.lineWidth = 4;
-    ctx.lineCap = 'round';
+  if (this.trail.length < 2) return;
 
-    for (let i = 1; i < this.trail.length; i++) {
-      const p1 = this.trail[i - 1];
-      const p2 = this.trail[i];
+  ctx.save();
 
-      const alpha = i / this.trail.length;
+  ctx.lineWidth = 6;              // thicker
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
 
-      ctx.strokeStyle = this.applyAlpha(this.color, alpha * 0.8);
-      ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
-      ctx.stroke();
-    }
+  ctx.shadowColor = this.color;   // glow
+  ctx.shadowBlur = 15;
 
-    ctx.restore();
+  for (let i = 1; i < this.trail.length; i++) {
+    const p1 = this.trail[i - 1];
+    const p2 = this.trail[i];
+
+    // Stronger fade gradient
+    const alpha = i / this.trail.length;
+
+    ctx.strokeStyle = this.applyAlpha(this.color, alpha);
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  }
+
+  ctx.restore();
   }
 
   renderPlayer(ctx) {
