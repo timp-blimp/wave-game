@@ -31,8 +31,17 @@ resizeCanvasToWindow(); // initial
 const sceneManager = new SceneManager();
 
 // create and register the menu scene
-const menuScene = new MenuScene(canvas);
+import GameScene from './scenes/GameScene.js';
+import EditorScene from './scenes/EditorScene.js';
+
+// === Scene manager setup ===
+const menuScene = new MenuScene(canvas, sceneManager);
+const gameScene = new GameScene();
+const editorScene = new EditorScene();
+
 sceneManager.register('menu', menuScene);
+sceneManager.register('game', gameScene);
+sceneManager.register('editor', editorScene);
 
 // start on menu
 sceneManager.changeScene('menu');
