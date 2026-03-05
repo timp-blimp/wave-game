@@ -71,7 +71,12 @@ export default class TerrainGenerator {
         let slope = 0;
 
         if (Math.random() < slopeChance) {
-          slope = Math.random() < 0.5 ? -1 : 1;
+          const variation = 40; // how dramatic waves are
+          currentY += (Math.random() - 0.5) * variation;;
+          const margin = 120;
+
+          currentY = Math.max(margin, currentY);
+          currentY = Math.min(this.canvas.height - margin, currentY);
         }
 
         this.addSegment(slope, difficultyLevel);
